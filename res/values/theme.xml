@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="app_theme" parent="android:Theme">
+          <item name="android:windowBackground">@drawable/rider1</item>
+          <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <drawable name="translucent_background">@drawable/rider1</drawable>
+    <style name="Theme.Translucent" parent="android:style/Theme.Translucent">
+        <item name="android:windowBackground">@drawable/rider1</item>
+    </style>
+</resources>

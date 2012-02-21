@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="ball_size_entries">
+        <item>大</item>
+        <item>中</item>
+        <item>小</item>
+    </array>
+
+    <string-array name="ball_size_entryvalues">
+        <item>22</item>
+        <item>16</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="array_pictures">
+        <item>@drawable/rider1</item>
+        <item>@drawable/rider2</item>
+    </string-array>
+</resources>

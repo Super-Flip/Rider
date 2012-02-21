@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/riderball_title">
+        <ListPreference
+            android:key="@string/ball_size_key"
+            android:title="@string/ball_size_title"
+            android:summary="@string/ball_size_summary"
+            android:dialogTitle="@string/ball_size_dialogtitle"
+            android:entries="@array/ball_size_entries"
+            android:entryValues="@array/ball_size_entryvalues"
+            android:defaultValue="20"/>
+    </PreferenceCategory>
+</PreferenceScreen>

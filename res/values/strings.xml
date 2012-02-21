@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RiderBall</string>
+    <string name="main_menu">Rider Menu</string>
+    <string name="rider">Rider</string>
+    <string name="setting">Rider Settings</string>
+    <string name="clear">Clear</string>
+
+    <string name="riderball_title">RiderBall</string>
+    <string name="ball_size_key">ball_size_key</string>
+    <string name="ball_size_title">ボールサイズ設定</string>
+    <string name="ball_size_summary">ライダーボールのサイズ設定を行います</string>
+    <string name="ball_size_dialogtitle">ボールサイズ設定</string>
+</resources>
