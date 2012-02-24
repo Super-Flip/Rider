@@ -176,14 +176,21 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         Bitmap src;
         Bitmap dst;
         int index;
+        int posX;
+        int posY;
+
         src = factory.getItemBitmap(R.id.goal_pocket);
-        dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 2);
-        index = getIndexFromPosition(mWidth / 2 , mHeight / 2);
+        dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 3);
+        posX = (mWidth / 2) + (dst.getWidth() / 2);
+        posY = (mHeight / 2) + (dst.getHeight() / 2);
+        index = getIndexFromPosition(posX, posY);
         mGoalPocketItem = new Item(dst, mWidth / 2, mHeight / 2, index);
 
         src = factory.getItemBitmap(R.id.double_ball);
-        dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 2);
-        index = getIndexFromPosition(mWidth /2 , mHeight / 2);
+        dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 3);
+        posX = (mWidth / 2) + (dst.getWidth() / 2);
+        posY = (mHeight / 2) + (dst.getHeight() / 2);
+        index = getIndexFromPosition(posX, posY);
         mDoubleBallItem = new Item(dst, mWidth /2  , mHeight / 2, index);
         src = null;
         dst = null;
@@ -353,7 +360,18 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                     }
                 }
             }
-            mHolder.unlockCanvasAndPost(canvas);
+
+            /** 初回起動時、又はクリア時は「Tap to start!」を表示 */
+            if (size == 0 && canvas != null) {
+                onDraw(canvas);
+                Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.tap_to_start);
+                canvas.drawBitmap(start, 30 , mHeight / 3, null);
+                start.recycle();
+            }
+
+            if(canvas != null) {
+                mHolder.unlockCanvasAndPost(canvas);
+            }
         }
     }
 
@@ -451,13 +469,13 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                 aCanvas.drawBitmap(mOverLay, 0, 0, null);
             }
 
+            int size = mCircleContainer.size();
             /** アイテム表示. */
-            if(mDoubleBallFlag == false) {
+            if(mDoubleBallFlag == false && size > 0) {
                 aCanvas.drawBitmap(mDoubleBallItem.bitmap, mDoubleBallItem.x, mDoubleBallItem.y, null);
             }
 
             /** 保持するボール全ての描画を行う。 */
-            int size = mCircleContainer.size();
             for(int i = 0; i < size; i++) {
                 Circle circle = mCircleContainer.get(i);
                 mPaint.setColor(Color.argb(255, circle.cr, circle.cb, circle.cg));
