@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -96,6 +97,12 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
 
     /** ゴールポケット出現係数. */
     private static final double GOAL_LINE = 0.7;
+
+    /** アイテム取得バイブレーション振動時間(milli sec). */
+    private static final int ITEM_VIBRATE = 150;
+    /** クリアバイブレーション振動パターン(OFF/ON/OFF/ON/...). */
+    private static final long[] CLEAR_VIBRATE = {0,100,100, 200, 100, 300};
+
 
     /** コンストラクタ.
      *
@@ -337,9 +344,10 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                     mDrawMapCount++;
                 }
 
-                /** アイテム取得判定. */
+                /** アイテム取得判定 */
                 if(mDoubleBallItem.index == index && mDoubleBallFlag == false) {
                     createBall(a.x, a.y);
+                    ((Vibrator)mParent.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(ITEM_VIBRATE);
                     mDoubleBallFlag = true;
                 }
 
@@ -347,6 +355,9 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                 if(mDrawMapCount >= (mMapWidth * mMapHeight * GOAL_LINE)) {
                     mGoalFlag = true;
                     if(mGoalPocketItem.index == index) {
+                        /** バイブレーション */
+                        ((Vibrator)mParent.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(CLEAR_VIBRATE, -1);
+
                         createBitmap();
                         mCircleContainer.clear();
                         mGoalFlag = false;
@@ -470,7 +481,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
             }
 
             int size = mCircleContainer.size();
-            /** アイテム表示. */
+            /** アイテム表示 */
             if(mDoubleBallFlag == false && size > 0) {
                 aCanvas.drawBitmap(mDoubleBallItem.bitmap, mDoubleBallItem.x, mDoubleBallItem.y, null);
             }
