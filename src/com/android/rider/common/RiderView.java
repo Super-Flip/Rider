@@ -326,14 +326,19 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
 
                 /** オーバーレイ画像をボールサイズ分透過する */
                 if (!mOverLay.isRecycled()) {
-                    int sx = (int) (a.x - a.radius);
-                    int dx = (int) (a.x + a.radius);
-                    int sy = (int) (a.y - a.radius);
-                    int dy = (int) (a.y + a.radius);
-                    int width = dx - sx;
-                    int height = dy - sy;
-                    int [] pixels = new int[width * height];
-                    mOverLay.setPixels(pixels, 0, width, sx, sy, width, height);
+                    // TODO 仮対応
+                    Canvas overlayCanvas = new Canvas( mOverLay );
+                    Paint paint = new Paint();
+                    paint.setColor( Color.GREEN );
+                    overlayCanvas.drawCircle( a.x, a.y, a.radius, paint );
+                    int[] pixels = new int[(int)((a.radius * 2) * (a.radius*2))];
+                    mOverLay.getPixels( pixels, 0, (int)(a.radius*2), (int)(a.x - a.radius), (int)(a.y - a.radius), (int)(a.radius*2), (int)(a.radius*2) );
+                    for (int count = 0; count < pixels.length; count++) {
+                        if (pixels[count] != OVERLAY_COLOR) {
+                            pixels[count] = 0;
+                        }
+                    }
+                    mOverLay.setPixels( pixels, 0, (int)(a.radius*2), (int)(a.x - a.radius), (int)(a.y - a.radius), (int)(a.radius*2), (int)(a.radius*2) );
                 }
 
                 /** 描画処理 */
