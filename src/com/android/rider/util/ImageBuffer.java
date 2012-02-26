@@ -383,14 +383,8 @@ public class ImageBuffer
      *
      */
     private class ClipInfo {
-        public int w;
-        public int h;
-
-        public ClipInfo()
-        {
-            this.w = 0;
-            this.h = 0;
-        }
+        public int w = 0;
+        public int h = 0;
 
         public ClipInfo(int w, int h)
         {

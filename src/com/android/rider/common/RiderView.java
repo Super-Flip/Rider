@@ -132,6 +132,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
      * SurfaceViewの生成時にコールされる。\n
      * ホルダーとスレッドをメンバーに保管する。\n
      */
+    @Override
     public void surfaceCreated(SurfaceHolder holder){
         Log.i(TAG, "surfaceCreated(SurfaceHolder holder) start");
         this.mHolder = holder;
@@ -145,6 +146,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
      * SurfaceViewの起動時にコールされる。\n
      * 画面の高さ・幅を保管、及びマップの初期化を行い、スレッドを起動する。\n
      */
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
     {
         Log.i(TAG, "surfaceChanged(SurfaceHolder holder, int format, int width, int height) start");
@@ -222,6 +224,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
      * SurfaceViewの破棄時にコールされる。\n
      * スレッド、及び Bitmap の破棄する。
      */
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.i(TAG, "surfaceDestroyed(SurfaceHolder holder) start");
         mThread = null;
@@ -233,6 +236,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
     /**
      * Thread起動
      */
+    @Override
     public void run()
     {
         while (mThread != null)
@@ -405,6 +409,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
      * 画面のタップ時にコールされる。\n
      * タップ位置へボールを表示する。\n
      */
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.i(TAG, "onTouchEvent(MotionEvent event) start");
         if(event.getAction() == MotionEvent.ACTION_DOWN)
@@ -465,6 +470,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
      *
      * @param aCanvas   Canvas
      */
+    @Override
     protected void onDraw(Canvas aCanvas)
     {
         try {

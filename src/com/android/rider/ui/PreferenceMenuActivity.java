@@ -94,6 +94,7 @@ public class PreferenceMenuActivity extends PreferenceActivity implements OnShar
      *
      * 設定の更新時にコールされる。\n
      */
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
             String key) {
         Log.i(TAG, "onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) start");
