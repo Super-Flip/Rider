@@ -54,6 +54,7 @@ public class RiderBallActivity extends Activity implements SensorEventListener {
      *
      * 表示 View の取得、及びセンサーの取得を行う。\n
      */
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate(Bundle savedInstanceState) start");
         super.onCreate(savedInstanceState);
@@ -80,6 +81,7 @@ public class RiderBallActivity extends Activity implements SensorEventListener {
      *
      * センサーマネージャーにリスナーを設定し、処理を開始する。
      */
+    @Override
     protected void onResume() {
         Log.i(TAG, "onResume() start");
         super.onResume();
@@ -111,6 +113,7 @@ public class RiderBallActivity extends Activity implements SensorEventListener {
      * センサー状態の変化時にコールされる。\n
      * 表示 View へ、状態変化の通知を行う。
      */
+    @Override
     public void onSensorChanged(SensorEvent event) {
         /** 加速度の取得 */
         if (event.sensor == mAccelerometer) {
@@ -121,6 +124,7 @@ public class RiderBallActivity extends Activity implements SensorEventListener {
     /** 精度変更イベントの処理.
      *
      */
+    @Override
     public void onAccuracyChanged(Sensor sensor,int accuracy) {
         // 現在未使用
     }
@@ -128,6 +132,7 @@ public class RiderBallActivity extends Activity implements SensorEventListener {
     /** Activity破棄.
      *
      */
+    @Override
     public void onDestroy() {
         Log.i(TAG, "onDestroy() start");
         super.onDestroy();

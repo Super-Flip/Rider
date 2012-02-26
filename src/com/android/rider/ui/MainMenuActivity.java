@@ -98,6 +98,7 @@ public class MainMenuActivity extends Activity implements OnSeekBarChangeListene
      * @param fromUser  ユーザー操作
      *
      */
+    @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if(progress >= 95) {
             mAnimLayout.setVisibility(View.VISIBLE);
@@ -111,6 +112,7 @@ public class MainMenuActivity extends Activity implements OnSeekBarChangeListene
      * アニメーション終了時にコールされる。\n
      * RiderBallActivity の起動を行う。\n
      */
+    @Override
     public void onAnimationEnd(Animation arg0) {
         Intent intent = new Intent();
         intent.setClass(this, RiderBallActivity.class);
@@ -118,12 +120,16 @@ public class MainMenuActivity extends Activity implements OnSeekBarChangeListene
     }
 
     // 未使用
+    @Override
     public void onStartTrackingTouch(SeekBar arg0) {}
     // 未使用
+    @Override
     public void onStopTrackingTouch(SeekBar arg0) {}
     // 未使用
+    @Override
     public void onAnimationRepeat(Animation arg0) {}
     // 未使用
+    @Override
     public void onAnimationStart(Animation arg0) {}
 
 
