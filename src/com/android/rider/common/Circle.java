@@ -40,6 +40,11 @@ public class Circle {
     /** B(青) */
     public int cb;
 
+    /** 前回 X 座標 */
+    public float prevX = -1;
+    /** 前回 Y 座標 */
+    public float prevY = -1;
+
     /** コンストラクタ.
      *
      * 指定されたボールサイズ、座標、移動距離、RGBを保管する。\n
