@@ -47,8 +47,8 @@ public class Item {
         Log.i(TAG, "Item(Bitmap bitmap, float x, float y, int index) finish");
     }
 
-    protected void finalize() throws Throwable {
-        if(bitmap != null) {
+    public void close() {
+        if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
         }
     }

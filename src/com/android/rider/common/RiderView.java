@@ -20,10 +20,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Region;
 import android.graphics.Paint.Cap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.Region;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,7 +32,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.android.rider.R;
-import com.android.rider.util.ImageBuffer;
 import com.android.rider.util.ImageUtils;
 
 /** RiderBall 表示用 SurfaceView クラス.
@@ -185,6 +184,9 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
     private void createBitmap() {
         /** 背景画像の作成 */
         ImageFactory factory = new ImageFactory(mParent);
+        if (mBitmap != null && !mBitmap.isRecycled()) {
+            mBitmap.recycle();
+        }
         mBitmap = factory.getRiderBitmap();
 
         /** ・ゴールポケット・アイテムの作成 */
@@ -199,35 +201,33 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         posX = (mWidth / 2) + (dst.getWidth() / 2);
         posY = (mHeight / 2) + (dst.getHeight() / 2);
         index = getIndexFromPosition(posX, posY);
+        if (mGoalPocketItem != null) {
+            mGoalPocketItem.close();
+        }
         mGoalPocketItem = new Item(dst, mWidth / 2, mHeight / 2, index);
+        src.recycle();
 
         src = factory.getItemBitmap(R.id.double_ball);
         dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 3);
         posX = (mWidth / 2) + (dst.getWidth() / 2);
         posY = (mHeight / 2) + (dst.getHeight() / 2);
         index = getIndexFromPosition(posX, posY);
+        if (mDoubleBallItem != null) {
+            mDoubleBallItem.close();
+        }
         mDoubleBallItem = new Item(dst, mWidth /2  , mHeight / 2, index);
-        src = null;
-        dst = null;
+        src.recycle();
 
         /** オーバーレイ画像の作成( オーバーレイ描画用の設定を全て行う ) */
-        ImageBuffer buf = new ImageBuffer(mWidth, mHeight);
-        buf.FillClip(
-                buf.new ClipFillInfo(
-                        0,
-                        0,
-                        mWidth,
-                        mHeight,
-                        OVERLAY_COLOR
-                        )
-                );
-        mOverLayMap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-        mOverLayMap.setPixels(buf.GetBuffer(), 0, mWidth, 0, 0, mWidth, mHeight);
-        mOverLayCanvas = new Canvas(mOverLayMap);
-        mOverLayPaint = new Paint();
-        mOverLayPaint.setColor(OVERLAY_TRANSPARENCY_COLOR);
-        mOverLayPaint.setStrokeCap(Cap.ROUND);
-        
+        if (mOverLayMap == null || mOverLayMap.isRecycled()) {
+            mOverLayMap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+            mOverLayCanvas = new Canvas(mOverLayMap);
+
+            mOverLayPaint = new Paint();
+            mOverLayPaint.setColor(OVERLAY_TRANSPARENCY_COLOR);
+            mOverLayPaint.setStrokeCap(Cap.ROUND);
+        }
+        mOverLayCanvas.drawColor(OVERLAY_COLOR);
     }
 
     /** SurfaceView破棄.
@@ -391,6 +391,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                             mMap[j] = false;
                         }
                         onDraw(canvas);
+                        System.gc();
                         break;
                     }
                 }
@@ -491,9 +492,10 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
      */
     protected void onDraw(Canvas aCanvas)
     {
+        super.onDraw(aCanvas);
         try {
             /** 背景画像の描画を行う。 */
-            aCanvas.drawARGB(255, 0, 0, 0);
+            aCanvas.drawColor(Color.BLACK);
             aCanvas.drawBitmap(mBitmap, 0, 0, null);
 
             /** ゴールラインを達成している場合、画面中央にポケットの描画を行う。 */
