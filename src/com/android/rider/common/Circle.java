@@ -40,6 +40,9 @@ public class Circle {
     /** B(青) */
     public int cb;
 
+    public float prevX;
+    public float prevY;
+
     /** コンストラクタ.
      *
      * 指定されたボールサイズ、座標、移動距離、RGBを保管する。\n

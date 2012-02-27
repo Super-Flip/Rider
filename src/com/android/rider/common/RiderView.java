@@ -19,6 +19,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.os.Vibrator;
@@ -104,6 +106,16 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
     private static final long[] CLEAR_VIBRATE = {0,100,100, 200, 100, 300};
 
 
+    /** 透過用 Matrix */
+    private static final float OVERLAY_MATRIX[] = {
+            1.0f,  0.0f, 0.0f, 0.0f,   0.0f,
+            0.0f,  1.0f, 0.0f, 0.0f,   0.0f,
+            0.0f,  0.0f, 1.0f, 0.0f,   0.0f,
+            1.0f, -1.0f, 1.0f, 0.0f, 255.0f
+    };
+    /** Matrix Filter 適用済み Paint instance */
+    private Paint mOverlayPaint = new Paint();
+
     /** コンストラクタ.
      *
      *
@@ -120,6 +132,8 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mGx = mGy = 0;
+
+        mOverlayPaint.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix(OVERLAY_MATRIX)));
 
         /** SurfaceHolder を取得し、コールバック登録を行う。 */
         getHolder().addCallback(this);
@@ -292,6 +306,10 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
             for(int i = 0 ; i < size ; i++)
             {
                 Circle a = mCircleContainer.get(i);
+                /* 前回位置保管 */
+                a.prevX = a.x;
+                a.prevY = a.y;
+
                 a.dx *= D_HOGE;
                 a.dy *= D_HOGE;
                 a.dx += mGx;
@@ -320,16 +338,15 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                     a.dy *= -1;
                 }
 
-                /** オーバーレイ画像をボールサイズ分透過する */
+                /** オーバーレイ画像をボールサイズ分透過する
+                 * ※注意! 必ずボール位置計算終了後に行うこと! */
                 if (!mOverLay.isRecycled()) {
-                    int sx = (int) (a.x - a.radius);
-                    int dx = (int) (a.x + a.radius);
-                    int sy = (int) (a.y - a.radius);
-                    int dy = (int) (a.y + a.radius);
-                    int width = dx - sx;
-                    int height = dy - sy;
-                    int [] pixels = new int[width * height];
-                    mOverLay.setPixels(pixels, 0, width, sx, sy, width, height);
+                    Canvas overlayCanvas = new Canvas(mOverLay);
+                    Paint paint = new Paint();
+                    paint.setColor(Color.GREEN);
+                    paint.setStrokeWidth(a.radius * 2);
+                    paint.setStrokeCap(Paint.Cap.ROUND);
+                    overlayCanvas.drawLine(a.prevX, a.prevY, a.x, a.y, paint);
                 }
 
                 /** 描画処理 */
@@ -477,7 +494,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                 aCanvas.drawBitmap(mGoalPocketItem.bitmap, mGoalPocketItem.x, mGoalPocketItem.y, null);
             } else {
                 /** 未達成の場合、オーバーレイ画像の描画を行う。 */
-                aCanvas.drawBitmap(mOverLay, 0, 0, null);
+                aCanvas.drawBitmap(mOverLay, 0, 0, mOverlayPaint);
             }
 
             int size = mCircleContainer.size();
