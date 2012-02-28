@@ -40,7 +40,7 @@ public class MainMenuActivity extends Activity implements OnSeekBarChangeListene
     /** アニメーション. */
     private Animation mAnimation = null;
     /** アニメーション表示時間. */
-    private static final int ANIMATION_TIME = 1500;
+    private static final int ANIMATION_TIME = 500;
 
     /** Activity 起動.
      *
