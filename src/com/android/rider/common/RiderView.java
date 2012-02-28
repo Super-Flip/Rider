@@ -523,7 +523,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
 
             int size = mCircleContainer.size();
             /** アイテム表示 */
-            if(mDoubleBallFlag == false && size > 0) {
+            if(mDoubleBallFlag == false && mGoalFlag == false && size > 0) {
                 aCanvas.drawBitmap(mDoubleBallItem.bitmap, mDoubleBallItem.x, mDoubleBallItem.y, null);
             }
 
