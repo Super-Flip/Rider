@@ -378,37 +378,52 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
                 }
 
                 /** 通過率算出処理 */
-                int index = getIndexFromPosition(a.x, a.y);
-                if(!mMap[index]) {
-                    mMap[index] = true;
+                int centerIndex = getIndexFromPosition(a.x, a.y);
+                if(!mMap[centerIndex]) {
+                    mMap[centerIndex] = true;
                     mDrawMapCount++;
                 }
 
+                /**
+                 * アイテム、ゴールポケットの当たり判定用に、
+                 * ボールの上下左右、及び中心の index を格納
+                 */
+                int indexArray[] = new int[5];
+                indexArray[0] = getIndexFromPosition(a.x, a.y);
+                indexArray[1] = getIndexFromPosition(a.x, a.y - a.radius);
+                indexArray[2] = getIndexFromPosition(a.x, a.y + a.radius);
+                indexArray[3] = getIndexFromPosition(a.x - a.radius, a.y);
+                indexArray[4] = getIndexFromPosition(a.x + a.radius, a.y);
+
                 /** アイテム取得判定 */
-                if(mDoubleBallItem.index == index && mDoubleBallFlag == false) {
-                    createBall(a.x, a.y);
-                    ((Vibrator)mParent.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(ITEM_VIBRATE);
-                    mDoubleBallFlag = true;
+                for(int index:indexArray) {
+                    if(mDoubleBallItem.index == index && mDoubleBallFlag == false) {
+                        createBall(a.x, a.y);
+                        ((Vibrator)mParent.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(ITEM_VIBRATE);
+                        mDoubleBallFlag = true;
+                    }
                 }
 
                 /** クリア判定 */
                 if(mDrawMapCount >= (mMapWidth * mMapHeight * GOAL_LINE)) {
                     mGoalFlag = true;
-                    if(mGoalPocketItem.index == index) {
-                        /** バイブレーション */
-                        ((Vibrator)mParent.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(CLEAR_VIBRATE, -1);
+                    for(int index:indexArray) {
+                        if(mGoalPocketItem.index == index) {
+                            /** バイブレーション */
+                            ((Vibrator)mParent.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(CLEAR_VIBRATE, -1);
 
-                        createBitmap();
-                        mCircleContainer.clear();
-                        mGoalFlag = false;
-                        mDoubleBallFlag = false;
-                        mDrawMapCount = 0;
-                        for(int j = 0; j < mMap.length; j++) {
-                            mMap[j] = false;
+                            createBitmap();
+                            mCircleContainer.clear();
+                            mGoalFlag = false;
+                            mDoubleBallFlag = false;
+                            mDrawMapCount = 0;
+                            for(int j = 0; j < mMap.length; j++) {
+                                mMap[j] = false;
+                            }
+                            onDraw(canvas);
+                            System.gc();
+                            break;
                         }
-                        onDraw(canvas);
-                        System.gc();
-                        break;
                     }
                 }
             }
