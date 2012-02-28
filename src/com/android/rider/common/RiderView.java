@@ -89,6 +89,8 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
     /** アイテム用 フラグ. */
     private boolean mDoubleBallFlag = false;
 
+    /** ボール用 Bitmap 画像. */
+    private Bitmap mBallmap;
     /** 最大ボール表示数. */
     private static final int BALL_MAX = 1;
     /** ボールサイズ. */
@@ -220,6 +222,13 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         mDoubleBallItem = new Item(dst, mWidth /2  , mHeight / 2, index);
         src.recycle();
 
+        src = factory.getItemBitmap(R.id.ball);
+        if(mBallmap != null && !mBallmap.isRecycled()) {
+            mBallmap.recycle();
+        }
+        mBallmap = ImageUtils.resizeBitmapToSpecifiedSize(src, (float) (mBallSize * 2.1));
+        src.recycle();
+
         /** オーバーレイ画像の作成( オーバーレイ描画用の設定を全て行う ) */
         if (mOverLayMap == null || mOverLayMap.isRecycled()) {
             mOverLayMap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
@@ -243,6 +252,9 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         mThread = null;
         mBitmap.recycle();
         mOverLayMap.recycle();
+        mBallmap.recycle();
+        mGoalPocketItem.close();
+        mDoubleBallItem.close();
         Log.i(TAG, "surfaceDestroyed(SurfaceHolder holder) finish");
     }
 
@@ -459,10 +471,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         float r = mBallSize;
         float ran = (float)Math.random();
         float m = ran * 10 + 10;
-        int cr = 255;
-        int cb = (int)(255 * Math.random());
-        int cg = (int)(255 * Math.random());
-        mCircleContainer.add(new Circle(r, x, y, dx, dy, m, cr, cg, cb));
+        mCircleContainer.add(new Circle(r, x, y, dx, dy, m));
     }
 
     /** 加速度の変更.
@@ -521,8 +530,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
             /** 保持するボール全ての描画を行う。 */
             for(int i = 0; i < size; i++) {
                 Circle circle = mCircleContainer.get(i);
-                mPaint.setColor(Color.argb(255, circle.cr, circle.cb, circle.cg));
-                aCanvas.drawCircle(circle.x, circle.y, circle.radius, mPaint);
+                aCanvas.drawBitmap(mBallmap, circle.x - circle.radius, circle.y - circle.radius, null);
             }
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));

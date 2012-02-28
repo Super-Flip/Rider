@@ -74,6 +74,8 @@ public class ImageFactory {
         case R.id.double_ball:
             src = BitmapFactory.decodeResource(mParent.getResources(), R.drawable.double_ball);
             break;
+        case R.id.ball:
+            src = BitmapFactory.decodeResource(mParent.getResources(), R.drawable.ball);
         }
         return src;
     }

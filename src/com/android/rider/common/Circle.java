@@ -30,15 +30,8 @@ public class Circle {
     public float dx;
     /** y 方向への進行距離 */
     public float dy;
-
+    /** 速度. */
     public float m;
-
-    /** R(赤) */
-    public int cr;
-    /** G(緑) */
-    public int cg;
-    /** B(青) */
-    public int cb;
 
     /** 前回 X 座標 */
     public float prevX = -1;
@@ -54,21 +47,17 @@ public class Circle {
      * @param dx
      * @param dy
      * @param m
-     * @param cr
-     * @param cb
-     * @param cg
      */
-    public Circle(float radius, float x, float y, float dx, float dy, float m, int cr, int cb, int cg) {
-        Log.i(TAG, "Circle(float radius, float x, float y, float dx, float dy, float m, int cr, int cb, int cg) start");
+    public Circle(float radius, float x, float y, float dx, float dy, float m) {
+        Log.i(TAG, "Circle(float radius, float x, float y, float dx, float dy, float m) start");
+
         this.radius = radius;
         this.x = x;
         this.y = y;
         this.dx = dx;
         this.dy = dy;
         this.m = m;
-        this.cr = cr;
-        this.cg = cg;
-        this.cb = cb;
-        Log.i(TAG, "Circle(float radius, float x, float y, float dx, float dy, float m, int cr, int cb, int cg) finish");
+
+        Log.i(TAG, "Circle(float radius, float x, float y, float dx, float dy, float m) finish");
     }
 }
