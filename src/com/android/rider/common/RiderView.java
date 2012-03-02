@@ -414,6 +414,7 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
 
                             createBitmap();
                             mCircleContainer.clear();
+                            size = 0;
                             mGoalFlag = false;
                             mDoubleBallFlag = false;
                             mDrawMapCount = 0;
