@@ -11,6 +11,7 @@
 package com.android.rider.common;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
@@ -199,27 +200,28 @@ public class RiderView extends SurfaceView implements SurfaceHolder.Callback, Ru
         int index;
         int posX;
         int posY;
+        Random rnd = new Random();
 
         src = factory.getItemBitmap(R.id.goal_pocket);
         dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 3);
-        posX = (mWidth / 2) + (dst.getWidth() / 2);
-        posY = (mHeight / 2) + (dst.getHeight() / 2);
-        index = getIndexFromPosition(posX, posY);
+        posX = rnd.nextInt(mWidth - dst.getWidth());
+        posY = rnd.nextInt(mHeight - dst.getHeight());
+        index = getIndexFromPosition(posX + dst.getWidth() / 2, posY + dst.getHeight() / 2);
         if (mGoalPocketItem != null) {
             mGoalPocketItem.close();
         }
-        mGoalPocketItem = new Item(dst, mWidth / 2, mHeight / 2, index);
+        mGoalPocketItem = new Item(dst, posX, posY, index);
         src.recycle();
 
         src = factory.getItemBitmap(R.id.double_ball);
         dst = ImageUtils.resizeBitmapToSpecifiedSize(src, mBallSize * 3);
-        posX = (mWidth / 2) + (dst.getWidth() / 2);
-        posY = (mHeight / 2) + (dst.getHeight() / 2);
-        index = getIndexFromPosition(posX, posY);
+        posX = rnd.nextInt(mWidth - dst.getWidth());
+        posY = rnd.nextInt(mHeight - dst.getHeight());
+        index = getIndexFromPosition(posX + dst.getWidth() / 2, posY + dst.getHeight() / 2);
         if (mDoubleBallItem != null) {
             mDoubleBallItem.close();
         }
-        mDoubleBallItem = new Item(dst, mWidth /2  , mHeight / 2, index);
+        mDoubleBallItem = new Item(dst, posX , posY, index);
         src.recycle();
 
         src = factory.getItemBitmap(R.id.ball);
